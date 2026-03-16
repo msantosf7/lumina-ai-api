@@ -7,7 +7,7 @@ import json
 import base64
 import io
 
-def generate_image_gemini(prompt, reference_image=None, preset="photorealistic"):
+def generate_image_gemini(prompt, reference_image=None, images=None, preset="raw"):
     """
     Generates an image using Gemini 3.1 Flash Image (Nano Banana 2).
     """
@@ -29,13 +29,21 @@ def generate_image_gemini(prompt, reference_image=None, preset="photorealistic")
         except Exception:
             styles = {}
 
-        # Get style fragments
-        style = styles.get(preset, styles.get("photorealistic", {}))
-        pos_style = style.get("positive", "")
-        neg_style = style.get("negative", "")
+        # Get style fragments only if preset is provided and not "raw"
+        pos_style = ""
+        neg_style = ""
+        
+        if preset and preset != "raw":
+            style = styles.get(preset, {})
+            pos_style = style.get("positive", "")
+            neg_style = style.get("negative", "")
 
         # Construct the final prompt
-        final_prompt = f"{pos_style}, {prompt}"
+        if pos_style:
+            final_prompt = f"{pos_style}, {prompt}"
+        else:
+            final_prompt = prompt
+            
         if neg_style:
             final_prompt += f" NOT {neg_style}"
 
@@ -57,18 +65,35 @@ def generate_image_gemini(prompt, reference_image=None, preset="photorealistic")
         except Exception as e:
             return {"status": "error", "message": f"Model initialization failed: {str(e)}"}
         
-        # Handle reference image if provided (Multimodal)
+        # Handle reference images (Multimodal)
         inputs = [final_prompt]
+        
+        # Combine single reference_image and multiple images list
+        image_sources = []
+        if images:
+            image_sources.extend(images)
         if reference_image:
-            if "base64," in reference_image:
-                reference_image = reference_image.split("base64,")[1]
-            image_data = base64.b64decode(reference_image)
+            image_sources.append(reference_image)
+
+        for img_src in image_sources:
+            if not img_src:
+                continue
+                
+            # Clean base64 header if present
+            if isinstance(img_src, str) and "base64," in img_src:
+                actual_data = img_src.split("base64,")[1]
+            else:
+                actual_data = img_src
             
-            image_part = {
-                "mime_type": "image/png",
-                "data": image_data
-            }
-            inputs.append(image_part)
+            try:
+                # Decode base64 to bytes
+                image_data = base64.b64decode(actual_data)
+                inputs.append({
+                    "mime_type": "image/png",
+                    "data": image_data
+                })
+            except Exception as e:
+                print(f"Error decoding image part: {e}")
 
         # Generate content
         response = model.generate_content(inputs)

@@ -1,10 +1,10 @@
-from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 class GenerationRequest(BaseModel):
     prompt: str
-    reference_image: Optional[str] = None
-    preset: str = "photorealistic"
+    reference_image: Optional[str] = None # Legacy support
+    images: Optional[List[str]] = None      # Multi-image support
+    preset: str = "raw"
     provider: str = "gemini"
 
 class GenerationResponse(BaseModel):

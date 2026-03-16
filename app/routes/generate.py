@@ -10,6 +10,7 @@ def generate(req: GenerationRequest):
     result = generate_image_gemini(
         prompt=req.prompt,
         reference_image=req.reference_image,
+        images=req.images,
         preset=req.preset
     )
 

@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+app/static/outputs/
+tmp/
+.vscode/
+.idea/
+venv/
+env/
+.devcontainer/

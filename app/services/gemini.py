@@ -3,19 +3,24 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import time
 import requests
-
-load_dotenv()
-
-# Configure the API key
-api_key = os.getenv("GOOGLE_API_KEY")
-if api_key:
-    genai.configure(api_key=api_key)
+import json
+import base64
+import io
 
 def generate_image_gemini(prompt, reference_image=None, preset="photorealistic"):
     """
     Generates an image using Gemini 3.1 Flash Image (Nano Banana 2).
     """
     try:
+        # Load environment variables (to capture recent changes)
+        load_dotenv()
+        
+        # Configure the API key dynamically
+        api_key = os.getenv("GOOGLE_API_KEY")
+        if not api_key:
+            return {"status": "error", "message": "GOOGLE_API_KEY NOT FOUND in environment or .env file."}
+        
+        genai.configure(api_key=api_key)
         # Load professional styles
         styles_path = os.path.join(os.path.dirname(__file__), "professional_styles.json")
         try:

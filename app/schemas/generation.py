@@ -5,7 +5,7 @@ class GenerationRequest(BaseModel):
     prompt: str
     reference_image: Optional[str] = None
     preset: str = "photorealistic"
-    provider: str = "comfyui"
+    provider: str = "gemini"
 
 class GenerationResponse(BaseModel):
     id: str

@@ -271,17 +271,6 @@
     <div class="container">
         <!-- Controls -->
         <div class="card">
-            <div class="form-group">
-                <label>Provedor de IA</label>
-                <div class="provider-selector">
-                    <button class="provider-btn active" onclick="setProvider('gemini')">
-                        <span>🍌</span> Nano Banana 2
-                    </button>
-                    <button class="provider-btn" onclick="setProvider('comfyui')">
-                        <span>⚙️</span> ComfyUI Local
-                    </button>
-                </div>
-            </div>
 
             <div class="form-group">
                 <label for="prompt">O que você quer criar?</label>
@@ -337,14 +326,6 @@
 
     <script>
         let currentProvider = 'gemini';
-
-        function setProvider(provider) {
-            currentProvider = provider;
-            document.querySelectorAll('.provider-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
-        }
 
         function handleFileUpload(input) {
             const file = input.files[0] || (input.dataTransfer && input.dataTransfer.files[0]);

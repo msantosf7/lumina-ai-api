@@ -1,0 +1,18 @@
+{
+  "photorealistic": {
+    "positive": "raw photo, masterpiece, best quality, (photorealistic:1.4), (ultra highres:1.2), (detailed skin:1.2), (textured skin:1.1), (natural lighting:1.2), (professional photography:1.2), extremely detailed, depth of field, sharp focus, 8k, bokeh, highly cinematic",
+    "negative": "(worst quality:2), (low quality:2), (normal quality:2), lowres, watermark, text, signature, letters, blurry, face distortion, deformed eyes, bad anatomy, cartoon, drawing, illustration, paint, doll, plastic, fake skin, 3d render"
+  },
+  "artistic": {
+    "positive": "(masterpiece:1.2), (best quality:1.2), digital art, concept art, artistic, elegant, creative, detailed, vibrant colors, brush strokes, oil painting, intricate textures",
+    "negative": "photo, realistic, 3d, (worst quality:2), (low quality:2), (normal quality:2), lowres, watermark, text, duplicate, deformed"
+  },
+  "cinematic": {
+    "positive": "epic cinematic lighting, (masterpiece:1.2), movie still, grainy film, (highly detailed:1.2), professional color grading, anamorphic lens flare, moody atmosphere, depth of field",
+    "negative": "cartoon, illustration, flat lighting, bright colors, worst quality, low quality, normal quality, lowres, watermark, text"
+  },
+  "anime": {
+    "positive": "anime style, high quality anime, (masterpiece:1.2), vibrant colors, clean lines, detailed background, (unreal engine:1.1), smooth rendering",
+    "negative": "photo, realistic, 3d, worst quality, low quality, normal quality, lowres, watermark, text, blurry"
+  }
+}

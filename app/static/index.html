@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina AI - Nano Banana 2 Pro</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.3);
+            --accent: #f43f5e;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.1) 0, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #6366f1, #f43f5e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        textarea, select, input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        textarea:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+
+        .provider-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .provider-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--glass-border);
+            color: var(--text-dim);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .provider-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px -6px var(--primary);
+        }
+
+        .btn-generate {
+            width: 100%;
+            padding: 1.2rem;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            color: white;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-generate:active {
+            transform: scale(0.98);
+        }
+
+        .btn-generate:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Result Display */
+        .preview-pane {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 500px;
+        }
+
+        .image-container {
+            width: 100%;
+            flex: 1;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 20px;
+            border: 1px dashed var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #output-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: opacity 0.5s ease;
+        }
+
+        .placeholder-text {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            text-align: center;
+            max-width: 200px;
+        }
+
+        .loading-shimmer {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            display: none;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <h1>LUMINA <sup>Nano</sup></h1>
+    <p class="subtitle">Powered by Google Nano Banana 2 (Gemini 3.1 Flash Image)</p>
+
+    <div class="container">
+        <!-- Controls -->
+        <div class="card">
+            <div class="form-group">
+                <label>Provedor de IA</label>
+                <div class="provider-selector">
+                    <button class="provider-btn active" onclick="setProvider('gemini')">
+                        <span>🍌</span> Nano Banana 2
+                    </button>
+                    <button class="provider-btn" onclick="setProvider('comfyui')">
+                        <span>⚙️</span> ComfyUI Local
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="prompt">O que você quer criar?</label>
+                <textarea id="prompt" rows="5" placeholder="Ex: Um astronauta cyberpunk cavalgando um elefante metálico em Marte, luzes neon, 8k..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="preset">Estilo Visual</label>
+                <select id="preset">
+                    <option value="photorealistic">📸 Fotorealismo Profissional</option>
+                    <option value="cinematic">🎬 Frame de Cinema</option>
+                    <option value="artistic">🎨 Arte Digital Conceitual</option>
+                    <option value="anime">✨ Anime de Alta Qualidade</option>
+                </select>
+            </div>
+
+            <button class="btn-generate" id="generate-btn" onclick="generate()">
+                Gerar Obra-Prima
+            </button>
+        </div>
+
+        <!-- Result -->
+        <div class="card preview-pane">
+            <label>Resultado Visível</label>
+            <div class="image-container">
+                <div class="loading-shimmer" id="shimmer"></div>
+                <div class="status-badge" id="status">GERANDO...</div>
+                <img id="output-image" style="display: none;">
+                <div class="placeholder-text" id="placeholder">
+                    <p>Sua imagem aparecerá aqui...</p>
+                </div>
+            </div>
+            
+            <div id="debug-info" style="font-size: 0.7rem; color: var(--text-dim); margin-top: auto;">
+                Pronto para gerar.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProvider = 'gemini';
+
+        function setProvider(provider) {
+            currentProvider = provider;
+            document.querySelectorAll('.provider-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        async function generate() {
+            const prompt = document.getElementById('prompt').value;
+            const preset = document.getElementById('preset').value;
+            const btn = document.getElementById('generate-btn');
+            const outputImage = document.getElementById('output-image');
+            const placeholder = document.getElementById('placeholder');
+            const shimmer = document.getElementById('shimmer');
+            const status = document.getElementById('status');
+            const debug = document.getElementById('debug-info');
+
+            if (!prompt) {
+                alert('Por favor, digite um prompt.');
+                return;
+            }
+
+            // UI State
+            btn.disabled = true;
+            btn.textContent = 'Processando...';
+            placeholder.style.display = 'none';
+            outputImage.style.display = 'none';
+            shimmer.style.display = 'block';
+            status.style.display = 'block';
+            debug.innerText = `Enviando para ${currentProvider}...`;
+
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        prompt, 
+                        provider: currentProvider,
+                        preset 
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'error') {
+                    throw new Error(data.message);
+                }
+
+                const url = data.image_url;
+                
+                // If it's a URL, show it
+                if (typeof url === 'string') {
+                    outputImage.src = url;
+                    outputImage.style.display = 'block';
+                    outputImage.onload = () => {
+                        shimmer.style.display = 'none';
+                        status.style.display = 'none';
+                        debug.innerText = 'Geração concluída com sucesso.';
+                    };
+                } else {
+                    debug.innerText = 'Aviso: Resposta retornada sem URL direta. Verifique os logs.';
+                    shimmer.style.display = 'none';
+                    status.style.display = 'none';
+                    placeholder.style.display = 'block';
+                }
+
+            } catch (err) {
+                debug.innerText = `Erro: ${err.message}`;
+                shimmer.style.display = 'none';
+                status.style.display = 'none';
+                placeholder.style.display = 'block';
+                alert('Erro na geração: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Gerar Obra-Prima';
+            }
+        }
+    </script>
+</body>
+</html>
